@@ -1,0 +1,63 @@
+{
+  "id": "preset_adobe_stock_8k",
+  "name": "Adobe Stock 8K Commercial",
+  "description": "Upscale to 8K (7680x4320), apply fine cinematic grain, resample to 300 DPI, and export maximum quality JPEG.",
+  "category": "Commercial Stock",
+  "author": "AntryGravity",
+  "version": "1.0",
+  "steps": [
+    {
+      "id": "step_upscale_8k",
+      "type": "upscale",
+      "enabled": true,
+      "label": "AI Upscale to 8K UHD",
+      "options": {
+        "preset": "8K",
+        "targetWidth": 7680,
+        "targetHeight": 4320,
+        "maintainAspect": true,
+        "resampleMethod": "preserveDetailsUpscale",
+        "sharpen": true
+      }
+    },
+    {
+      "id": "step_grain_film",
+      "type": "grain",
+      "enabled": true,
+      "label": "Photographic Fine Grain",
+      "options": {
+        "preset": "Fine Grain",
+        "amount": 9,
+        "size": 1,
+        "roughness": 20,
+        "contrast": 25,
+        "blendMode": "overlay",
+        "opacity": 70,
+        "monochromatic": true
+      }
+    },
+    {
+      "id": "step_dpi_300",
+      "type": "resize",
+      "enabled": true,
+      "label": "Enforce 300 DPI Print Density",
+      "options": {
+        "dpi": 300,
+        "fitMode": "fit"
+      }
+    },
+    {
+      "id": "step_export_jpg",
+      "type": "export",
+      "enabled": true,
+      "label": "Export Master JPEG (100% Quality)",
+      "options": {
+        "format": "jpg",
+        "quality": 12,
+        "suffix": "_8K_STOCK",
+        "sequential": false,
+        "overwriteExisting": false
+      }
+    }
+  ]
+}

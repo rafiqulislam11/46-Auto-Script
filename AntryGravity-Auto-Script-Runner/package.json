@@ -1,0 +1,25 @@
+{
+  "name": "antrygravity-auto-script-runner",
+  "version": "1.0.0",
+  "description": "AntryGravity Auto Script Runner – Professional Photoshop Automation Extension",
+  "main": "src/index.html",
+  "scripts": {
+    "start": "node tools/serve.js",
+    "install:cep": "install-to-photoshop.bat",
+    "dev": "node tools/watch.js",
+    "build": "node tools/build.js",
+    "package": "node tools/package.js",
+    "debug": "node tools/debug.js",
+    "lint": "node tools/lint.js"
+  },
+  "keywords": ["photoshop", "extension", "uxp", "automation", "batch"],
+  "author": "AntryGravity",
+  "license": "MIT",
+  "devDependencies": {
+    "archiver": "^6.0.1",
+    "chokidar": "^3.6.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

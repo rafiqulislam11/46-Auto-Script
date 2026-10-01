@@ -1,0 +1,48 @@
+{
+  "id": "preset_passport_standard",
+  "name": "Official Passport 2x2 Sheet",
+  "description": "Remove background to solid white, crop to 2x2 in (600x600 px) at 300 DPI, and assemble 6 copies on a 4x6 print sheet.",
+  "category": "Identity & Print",
+  "author": "AntryGravity",
+  "version": "1.0",
+  "steps": [
+    {
+      "id": "step_bg_white",
+      "type": "background",
+      "enabled": true,
+      "label": "Isolate Subject & Replace BG with Pure White",
+      "options": {
+        "mode": "white",
+        "customColor": "#FFFFFF",
+        "feather": 0.5,
+        "edgeRefine": true
+      }
+    },
+    {
+      "id": "step_passport_dims",
+      "type": "passport",
+      "enabled": true,
+      "label": "Crop to 2x2 in & Generate 6-up Print Grid",
+      "options": {
+        "photoSize": "us_2x2",
+        "targetWidth": 600,
+        "targetHeight": 600,
+        "dpi": 300,
+        "copies": 6,
+        "cutLines": true
+      }
+    },
+    {
+      "id": "step_passport_export",
+      "type": "export",
+      "enabled": true,
+      "label": "Export Printable JPEG Sheet",
+      "options": {
+        "format": "jpg",
+        "quality": 12,
+        "suffix": "_PASSPORT_PRINT_SHEET",
+        "sequential": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "id": "preset_social_pack",
+  "name": "Social Media Carousel Pack",
+  "description": "Resize to 1080x1350 (4:5 Instagram Portrait ratio), subtle grain punch, and web-optimized JPG export.",
+  "category": "Social Media",
+  "author": "AntryGravity",
+  "version": "1.0",
+  "steps": [
+    {
+      "id": "step_res_ig",
+      "type": "resize",
+      "enabled": true,
+      "label": "Resize to Instagram 4:5 Portrait (1080x1350)",
+      "options": {
+        "preset": "Instagram Portrait",
+        "width": 1080,
+        "height": 1350,
+        "dpi": 72,
+        "fitMode": "fill",
+        "constrain": true
+      }
+    },
+    {
+      "id": "step_grain_ig",
+      "type": "grain",
+      "enabled": true,
+      "label": "Subtle Digital Grain Overlay",
+      "options": {
+        "preset": "Digital Grain",
+        "amount": 7,
+        "size": 1,
+        "roughness": 15,
+        "contrast": 20,
+        "blendMode": "overlay",
+        "opacity": 60,
+        "monochromatic": true
+      }
+    },
+    {
+      "id": "step_exp_ig",
+      "type": "export",
+      "enabled": true,
+      "label": "Export Compressed JPG for Web",
+      "options": {
+        "format": "jpg",
+        "quality": 10,
+        "suffix": "_IG_PORTRAIT",
+        "sequential": true,
+        "seqPadding": 2,
+        "createSubfolder": true,
+        "subfolderName": "Instagram_Export"
+      }
+    }
+  ]
+}

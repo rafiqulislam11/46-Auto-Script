@@ -1,0 +1,44 @@
+{
+  "id": "com.antrygravity.autoscriptrunner",
+  "name": "AntryGravity Auto Script Runner",
+  "version": "1.0.0",
+  "manifestVersion": 6,
+  "main": "src/index.html",
+  "host": [
+    {
+      "app": "PS",
+      "minVersion": "23.0.0",
+      "maxVersion": "99.9.9"
+    }
+  ],
+  "entrypoints": [
+    {
+      "type": "panel",
+      "id": "antrygravity-panel",
+      "label": {
+        "default": "AntryGravity Auto Script Runner"
+      },
+      "minimumSize": { "width": 320, "height": 600 },
+      "maximumSize": { "width": 800, "height": 2000 },
+      "preferredDockedSize": { "width": 380, "height": 800 },
+      "icons": [
+        { "width": 23, "height": 23, "path": "src/assets/icon-23.png", "scale": [1, 2], "theme": ["darkest", "dark", "medium", "light", "lightest", "all"] },
+        { "width": 26, "height": 26, "path": "src/assets/icon-26.png", "scale": [1, 2], "theme": ["darkest", "dark", "medium", "light", "lightest", "all"] }
+      ]
+    }
+  ],
+  "requiredPermissions": {
+    "localFileSystem": "fullAccess",
+    "network": {
+      "domains": ["allow-localhost"]
+    },
+    "launchProcess": {
+      "schemes": ["file"]
+    },
+    "clipboard": "readAndWrite",
+    "webview": {
+      "allow": "yes",
+      "domains": ["allow-localhost"]
+    }
+  }
+}

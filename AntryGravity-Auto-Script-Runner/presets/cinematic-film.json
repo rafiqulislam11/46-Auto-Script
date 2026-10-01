@@ -1,0 +1,47 @@
+{
+  "id": "preset_cinematic_film",
+  "name": "35mm Cinematic Film Master",
+  "description": "Applies organic medium film grain, subtle cinematic contrast curve, rich shadow tones, and exports archival TIFF.",
+  "category": "Cinema & Editorial",
+  "author": "AntryGravity",
+  "version": "1.0",
+  "steps": [
+    {
+      "id": "step_cin_effect",
+      "type": "effects",
+      "enabled": true,
+      "label": "Cinematic Movie Contrast Profile",
+      "options": {
+        "effectKey": "cinematic",
+        "intensity": 75,
+        "opacity": 90
+      }
+    },
+    {
+      "id": "step_cin_grain",
+      "type": "grain",
+      "enabled": true,
+      "label": "Vintage 35mm Film Grain Emulation",
+      "options": {
+        "preset": "Film Grain",
+        "amount": 16,
+        "size": 2,
+        "roughness": 40,
+        "contrast": 45,
+        "blendMode": "overlay",
+        "opacity": 80,
+        "monochromatic": true
+      }
+    },
+    {
+      "id": "step_cin_export",
+      "type": "export",
+      "enabled": true,
+      "label": "Export Archival Uncompressed TIFF",
+      "options": {
+        "format": "tiff",
+        "suffix": "_CINEMATIC_35MM"
+      }
+    }
+  ]
+}

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AntryGravity Auto Script Runner – Professional Photoshop Automation Panel" />
+  <title>AntryGravity Auto Script Runner</title>
+  <link rel="stylesheet" href="styles/main.css" />
+  <link rel="stylesheet" href="styles/components.css" />
+</head>
+<body class="ag-panel" style="background:#161618; color:#f0f0f4; margin:0; padding:0; width:100%; min-height:100%;">
+
+  <!-- ═══════════════════════════════════════════
+       HEADER
+  ═══════════════════════════════════════════ -->
+  <header class="ag-header" id="ag-header">
+    <div class="ag-header__brand">
+      <span class="ag-logo">⬡</span>
+      <div class="ag-brand-text">
+        <span class="ag-brand-name">ANTRYGRAVITY</span>
+        <span class="ag-brand-sub">Auto Script Runner</span>
+      </div>
+    </div>
+    <div class="ag-header__meta">
+      <span class="ag-ps-version" id="ag-ps-version">Detecting…</span>
+      <span class="ag-status" id="ag-status">
+        <span class="ag-status-dot" id="ag-status-dot"></span>
+        <span id="ag-status-text">Connecting</span>
+      </span>
+    </div>
+    <div class="ag-header__actions">
+      <button class="ag-icon-btn" id="btn-settings" title="Settings" aria-label="Settings">⚙</button>
+      <button class="ag-icon-btn" id="btn-help"     title="Help"     aria-label="Help">?</button>
+      <button class="ag-icon-btn" id="btn-log"      title="Logs"     aria-label="Logs">≡</button>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════════════════
+       NAVIGATION TABS
+  ═══════════════════════════════════════════ -->
+  <nav class="ag-nav" id="ag-nav" role="tablist" aria-label="Main Navigation">
+    <button class="ag-nav__tab active" data-view="dashboard"  role="tab">Dashboard</button>
+    <button class="ag-nav__tab"        data-view="workflow"   role="tab">Workflow</button>
+    <button class="ag-nav__tab"        data-view="queue"      role="tab">Queue</button>
+    <button class="ag-nav__tab"        data-view="library"    role="tab">Library</button>
+    <button class="ag-nav__tab"        data-view="presets"    role="tab">Presets</button>
+    <button class="ag-nav__tab"        data-view="log"        role="tab">Log</button>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════
+       MAIN CONTENT VIEWS
+  ═══════════════════════════════════════════ -->
+  <main class="ag-main" id="ag-main">
+
+    <!-- ─── DASHBOARD ─── -->
+    <section class="ag-view active" id="view-dashboard" aria-label="Dashboard">
+      <div class="ag-dashboard-grid" id="ag-dashboard-grid">
+        <!-- Cards injected by ui.js -->
+      </div>
+    </section>
+
+    <!-- ─── MODULE PANEL (shared slot for all module UIs) ─── -->
+    <section class="ag-view" id="view-module" aria-label="Module Panel">
+      <div class="ag-module-header">
+        <button class="ag-back-btn" id="btn-module-back">← Back</button>
+        <h2 class="ag-module-title" id="ag-module-title">Module</h2>
+      </div>
+      <div class="ag-module-body" id="ag-module-body">
+        <!-- Loaded dynamically -->
+      </div>
+    </section>
+
+    <!-- ─── WORKFLOW BUILDER ─── -->
+    <section class="ag-view" id="view-workflow" aria-label="Workflow Builder">
+      <div id="workflow-container"><!-- injected by workflow-engine.js --></div>
+    </section>
+
+    <!-- ─── QUEUE ─── -->
+    <section class="ag-view" id="view-queue" aria-label="Batch Queue">
+      <div id="queue-container"><!-- injected by queue.js --></div>
+    </section>
+
+    <!-- ─── SCRIPT LIBRARY ─── -->
+    <section class="ag-view" id="view-library" aria-label="Script Library">
+      <div id="library-container"><!-- injected by script-runner.js --></div>
+    </section>
+
+    <!-- ─── PRESETS ─── -->
+    <section class="ag-view" id="view-presets" aria-label="Presets">
+      <div id="presets-container"><!-- injected by preset-manager.js --></div>
+    </section>
+
+    <!-- ─── LOG ─── -->
+    <section class="ag-view" id="view-log" aria-label="Activity Log">
+      <div id="log-container"><!-- injected by logger.js --></div>
+    </section>
+
+    <!-- ─── SETTINGS ─── -->
+    <section class="ag-view" id="view-settings" aria-label="Settings">
+      <div id="settings-container"><!-- injected by ui.js --></div>
+    </section>
+
+  </main>
+
+  <!-- ═══════════════════════════════════════════
+       PROGRESS BAR (global)
+  ═══════════════════════════════════════════ -->
+  <div class="ag-progress-bar-wrap" id="ag-progress-wrap" style="display:none">
+    <div class="ag-progress-bar" id="ag-progress-bar" style="width:0%"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       TOAST NOTIFICATION
+  ═══════════════════════════════════════════ -->
+  <div class="ag-toast" id="ag-toast" role="alert" aria-live="polite"></div>
+
+  <!-- ═══════════════════════════════════════════
+       CONFIRMATION MODAL
+  ═══════════════════════════════════════════ -->
+  <div class="ag-modal-overlay" id="ag-modal-overlay" style="display:none">
+    <div class="ag-modal" id="ag-modal" role="dialog" aria-modal="true">
+      <h3 class="ag-modal-title" id="ag-modal-title">Confirm</h3>
+      <p  class="ag-modal-body"  id="ag-modal-body"></p>
+      <div class="ag-modal-actions">
+        <button class="ag-btn ag-btn--ghost" id="ag-modal-cancel">Cancel</button>
+        <button class="ag-btn ag-btn--primary" id="ag-modal-confirm">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SCRIPTS – order matters
+  ═══════════════════════════════════════════ -->
+  <script src="js/logger.js"></script>
+  <script src="js/version-detector.js"></script>
+  <script src="adapters/photoshop/ps-adapter.js"></script>
+  <script src="adapters/legacy/CSInterface.js"></script>
+  <script src="adapters/legacy/cep-adapter.js"></script>
+  <script src="adapters/ai/base-provider.js"></script>
+  <script src="adapters/ai/upscale-provider.js"></script>
+  <script src="adapters/ai/background-provider.js"></script>
+  <script src="adapters/illustrator/ai-adapter.js"></script>
+  <script src="js/queue.js"></script>
+  <script src="js/script-runner.js"></script>
+  <script src="js/action-runner.js"></script>
+  <script src="js/export-manager.js"></script>
+  <script src="js/preset-manager.js"></script>
+  <script src="js/workflow-engine.js"></script>
+  <script src="modules/batch/batch.js"></script>
+  <script src="modules/upscale/upscale.js"></script>
+  <script src="modules/gradient/gradient.js"></script>
+  <script src="modules/blur/blur.js"></script>
+  <script src="modules/grain/grain.js"></script>
+  <script src="modules/actions/actions.js"></script>
+  <script src="modules/background/background.js"></script>
+  <script src="modules/passport/passport.js"></script>
+  <script src="modules/resize/resize.js"></script>
+  <script src="modules/vector/vector.js"></script>
+  <script src="modules/icons/icons.js"></script>
+  <script src="modules/effects/effects.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>

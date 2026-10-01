@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ExtensionManifest Version="7.0" ExtensionBundleId="com.antrygravity.autoscriptrunner" ExtensionBundleVersion="1.0.0"
+    ExtensionBundleName="AntryGravity Auto Script Runner" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <ExtensionList>
+        <Extension Id="com.antrygravity.autoscriptrunner.panel" Version="1.0.0" />
+    </ExtensionList>
+    <ExecutionEnvironment>
+        <HostList>
+            <!-- Photoshop 2020 (v21.0) through 2026 (v27.9) legacy CEP fallback -->
+            <Host Name="PHXS" Version="[19.0,99.9]" />
+            <Host Name="PHSP" Version="[19.0,99.9]" />
+            <Host Name="ILST" Version="[19.0,99.9]" />
+        </HostList>
+        <LocaleList>
+            <Locale Code="All" />
+        </LocaleList>
+        <RequiredRuntimeList>
+            <RequiredRuntime Name="CSXS" Version="6.0" />
+        </RequiredRuntimeList>
+    </ExecutionEnvironment>
+    <DispatchInfoList>
+        <Extension Id="com.antrygravity.autoscriptrunner.panel">
+            <DispatchInfo>
+                <Resources>
+                    <MainPath>./src/index.html</MainPath>
+                    <ScriptPath>./scripts/photoshop/actions.jsx</ScriptPath>
+                    <CEFCommandLine>
+                        <Parameter>--allow-file-access-from-files</Parameter>
+                        <Parameter>--disable-gpu</Parameter>
+                        <Parameter>--disable-gpu-compositing</Parameter>
+                    </CEFCommandLine>
+                </Resources>
+                <Lifecycle>
+                    <AutoVisible>false</AutoVisible>
+                </Lifecycle>
+                <UI>
+                    <Type>Panel</Type>
+                    <Menu>AntryGravity Auto Script Runner</Menu>
+                    <Geometry>
+                        <Size>
+                            <Width>380</Width>
+                            <Height>720</Height>
+                        </Size>
+                        <MinSize>
+                            <Width>200</Width>
+                            <Height>300</Height>
+                        </MinSize>
+                        <MaxSize>
+                            <Width>1200</Width>
+                            <Height>2400</Height>
+                        </MaxSize>
+                    </Geometry>
+                    <Icons>
+                        <Icon Type="Normal">./src/assets/icon-23.png</Icon>
+                        <Icon Type="RollOver">./src/assets/icon-23.png</Icon>
+                        <Icon Type="DarkNormal">./src/assets/icon-23.png</Icon>
+                        <Icon Type="DarkRollOver">./src/assets/icon-23.png</Icon>
+                    </Icons>
+                </UI>
+            </DispatchInfo>
+        </Extension>
+    </DispatchInfoList>
+</ExtensionManifest>

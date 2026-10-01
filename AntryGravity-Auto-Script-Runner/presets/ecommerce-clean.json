@@ -1,0 +1,49 @@
+{
+  "id": "preset_ecommerce_clean",
+  "name": "E-Commerce Product Clean (White BG 2000x2000)",
+  "description": "Removes background, places on clean white canvas, standardizes to 2000x2000 px square, and exports web-optimized JPEG.",
+  "category": "E-Commerce",
+  "author": "AntryGravity",
+  "version": "1.0",
+  "steps": [
+    {
+      "id": "step_ecom_bg",
+      "type": "background",
+      "enabled": true,
+      "label": "Isolate Product with Clean White Backdrop",
+      "options": {
+        "mode": "white",
+        "customColor": "#FFFFFF",
+        "feather": 0.5,
+        "edgeRefine": true
+      }
+    },
+    {
+      "id": "step_ecom_resize",
+      "type": "resize",
+      "enabled": true,
+      "label": "Standardize to 2000x2000 Square",
+      "options": {
+        "preset": "Custom",
+        "width": 2000,
+        "height": 2000,
+        "dpi": 72,
+        "fitMode": "fit",
+        "constrain": true
+      }
+    },
+    {
+      "id": "step_ecom_export",
+      "type": "export",
+      "enabled": true,
+      "label": "Export Optimized JPEG",
+      "options": {
+        "format": "jpg",
+        "quality": 10,
+        "suffix": "_PRODUCT_CLEAN",
+        "sequential": true,
+        "seqPadding": 3
+      }
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "id": "preset_cyberpunk_neon",
+  "name": "Cyberpunk Neon & Glow",
+  "description": "Applies intense dual-hue cyber glow, chromatic soft blur highlights, and outputs high-contrast PNG.",
+  "category": "Creative & Sci-Fi",
+  "author": "AntryGravity",
+  "version": "1.0",
+  "steps": [
+    {
+      "id": "step_neon_effect",
+      "type": "effects",
+      "enabled": true,
+      "label": "Cyber Neon Glow Layer Stack",
+      "options": {
+        "effectKey": "neon",
+        "intensity": 90,
+        "opacity": 100
+      }
+    },
+    {
+      "id": "step_grad_overlay",
+      "type": "gradient",
+      "enabled": true,
+      "label": "Indigo-to-Cyan Specular Accent",
+      "options": {
+        "engine": "glass",
+        "colors": ["#6c63ff", "#00c8ff"],
+        "angle": 135,
+        "intensity": 65,
+        "blendMode": "screen",
+        "opacity": 40
+      }
+    },
+    {
+      "id": "step_neon_export",
+      "type": "export",
+      "enabled": true,
+      "label": "Export High Fidelity PNG",
+      "options": {
+        "format": "png",
+        "suffix": "_NEON_GLOW"
+      }
+    }
+  ]
+}
