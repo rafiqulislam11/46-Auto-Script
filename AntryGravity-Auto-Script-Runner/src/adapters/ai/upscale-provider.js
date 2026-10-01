@@ -27,7 +27,7 @@ class NativePSUpscaleProvider extends BaseAIProvider {
    */
   async process(input) {
     const { targetWidth, targetHeight, resampleMethod = 'preserveDetailsUpscale', sharpen = false } = input;
-    const bridge = (window.AGApp && window.AGApp.getActiveBridge ? window.AGApp.getActiveBridge() : (window.PSAdapter || window.CEPAdapter));
+    const bridge = (window.AGApp && window.AGApp.getActiveBridge ? window.AGApp.getActiveBridge() : (window.PSAdapter || window.CEPAdapter || window.WebStudioAdapter));
 
     if (!bridge) {
       throw new Error('No active Photoshop bridge found for native upscale');

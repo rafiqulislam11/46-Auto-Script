@@ -29,23 +29,33 @@ const AGApp = (() => {
         if (uxpSuccess) {
           _activeBridge = window.PSAdapter;
           window.AGUI && window.AGUI.setStatus && window.AGUI.setStatus('Connected (UXP)', 'connected');
-        } else {
-          _activeBridge = window.CEPAdapter;
-          window.AGUI && window.AGUI.setStatus && window.AGUI.setStatus('Fallback (CEP/JSX)', 'connected');
         }
-      } else if (window.CEPAdapter) {
-        window.CEPAdapter.init();
-        _activeBridge = window.CEPAdapter;
-        window.AGUI && window.AGUI.setStatus && window.AGUI.setStatus('Connected (CEP)', 'connected');
+      }
+
+      if (!_activeBridge && apiMode === 'cep' && window.CEPAdapter) {
+        const cepSuccess = window.CEPAdapter.init();
+        if (cepSuccess && window.CEPAdapter.isAvailable) {
+          _activeBridge = window.CEPAdapter;
+          window.AGUI && window.AGUI.setStatus && window.AGUI.setStatus('Connected (CEP)', 'connected');
+        }
+      }
+
+      // Web Studio Mode (In-Browser / GitHub Pages / Standalone Preview)
+      if (!_activeBridge && window.WebStudioAdapter) {
+        await window.WebStudioAdapter.init();
+        _activeBridge = window.WebStudioAdapter;
+        window.AGUI && window.AGUI.setStatus && window.AGUI.setStatus('Web Studio Mode', 'connected');
+        AGLogger.success('[App] Initialized WebStudioAdapter (HTML5 Canvas Engine + Live Studio Canvas)');
       }
 
       // Step 3: Initialize UI
       if (window.AGUI) {
         window.AGUI.init();
-        window.AGUI.setPhotoshopVersion(`Photoshop ${psYear}`);
+        const displayVersion = psYear === 'Web Studio' || psYear === 0 ? 'Web Studio' : `Photoshop ${psYear}`;
+        window.AGUI.setPhotoshopVersion(displayVersion);
       }
 
-      AGLogger.success(`[App] AntryGravity Auto Script Runner ready on Photoshop ${psYear}`);
+      AGLogger.success(`[App] AntryGravity Auto Script Runner ready (${psYear === 'Web Studio' ? 'Web Studio Mode' : 'Photoshop ' + psYear})`);
     } catch (err) {
       AGLogger.error(`[App] Startup initialization failed: ${err.message}`);
       if (window.AGUI) {

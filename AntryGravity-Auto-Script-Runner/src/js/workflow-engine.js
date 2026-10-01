@@ -291,7 +291,7 @@ const AGWorkflowEngine = (() => {
      * Executes the workflow on the active document or runs batch queue
      */
     async runOnActiveDocument() {
-      const bridge = (window.AGApp && window.AGApp.getActiveBridge ? window.AGApp.getActiveBridge() : (window.PSAdapter || window.CEPAdapter));
+      const bridge = (window.AGApp && window.AGApp.getActiveBridge ? window.AGApp.getActiveBridge() : (window.PSAdapter || window.CEPAdapter || window.WebStudioAdapter));
       if (!bridge) throw new Error('No Photoshop bridge connected.');
 
       const activeSteps = _steps.filter(s => s.enabled);
@@ -336,11 +336,13 @@ const AGWorkflowEngine = (() => {
       AGLogger.info(`[WorkflowEngine] Starting batch workflow run for ${items.length} images...`);
 
       window.AGQueue.setProcessor(async (item, index) => {
-        const bridge = (window.AGApp && window.AGApp.getActiveBridge ? window.AGApp.getActiveBridge() : (window.PSAdapter || window.CEPAdapter));
+        const bridge = (window.AGApp && window.AGApp.getActiveBridge ? window.AGApp.getActiveBridge() : (window.PSAdapter || window.CEPAdapter || window.WebStudioAdapter));
 
         // Open image
         if (item.entry && bridge.openDocument) {
           await bridge.openDocument(item.entry);
+        } else if (item.file && bridge.openDocument) {
+          await bridge.openDocument(item.file);
         } else if (item.path && bridge.openDocument) {
           await bridge.openDocument(item.path);
         }

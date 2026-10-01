@@ -154,7 +154,7 @@ const AGBlurModule = (() => {
   }
 
   async function applyBlur(settings) {
-    const bridge = (window.AGApp && window.AGApp.getActiveBridge ? window.AGApp.getActiveBridge() : (window.PSAdapter || window.CEPAdapter));
+    const bridge = (window.AGApp && window.AGApp.getActiveBridge ? window.AGApp.getActiveBridge() : (window.PSAdapter || window.CEPAdapter || window.WebStudioAdapter));
     if (!bridge) throw new Error('Photoshop bridge not connected');
 
     AGLogger.info(`[Blur] Applying ${settings.type} blur with radius ${settings.radius}`);

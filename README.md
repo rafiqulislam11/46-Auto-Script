@@ -5,6 +5,7 @@
 > **Professional Photoshop Automation Panel, Batch Image Processor & Auto Script Runner**  
 > *Engineered for Adobe Photoshop 2020, 2021, 2022, 2023, 2024, 2025, and 2026.*
 
+[![Live Web Studio](https://img.shields.io/badge/Live%20Web%20Studio-Launch%20Online-6366f1.svg?style=for-the-badge&logo=googlechrome)](https://rafiqulislam11.github.io/46-Auto-Script/)
 [![Photoshop Version](https://img.shields.io/badge/Photoshop-2020--2026-blue.svg)](https://www.adobe.com/products/photoshop.html)
 [![UXP Support](https://img.shields.io/badge/UXP-Manifest%20v6-purple.svg)](https://developer.adobe.com/photoshop/uxp/)
 [![CEP Legacy Support](https://img.shields.io/badge/CEP-10.0%20Fallback-orange.svg)](https://github.com/Adobe-CEP)

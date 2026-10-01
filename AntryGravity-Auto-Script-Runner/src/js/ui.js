@@ -28,12 +28,86 @@ const AGUI = (() => {
   let _activeView = 'dashboard';
   let _currentModuleId = null;
 
+  let _scriptMode = 'uxp';
+
   function init() {
     _renderDashboard();
     _bindNav();
     _bindHeaderButtons();
     _bindBackBtn();
     _initLoggerMount();
+    _initLiveStudioCanvas();
+  }
+
+  function _initLiveStudioCanvas() {
+    const liveCanvas = document.querySelector('#ag-live-preview-canvas');
+    const docName = document.querySelector('#dock-doc-name');
+    const docDims = document.querySelector('#dock-doc-dims');
+    const btnOpen = document.querySelector('#btn-dock-open');
+    const btnSample = document.querySelector('#btn-dock-sample');
+    const btnReset = document.querySelector('#btn-dock-reset');
+    const btnExport = document.querySelector('#btn-dock-export');
+
+    function syncCanvas(doc) {
+      if (!doc || !doc.canvas || !liveCanvas) return;
+      liveCanvas.width = doc.canvas.width;
+      liveCanvas.height = doc.canvas.height;
+      const ctx = liveCanvas.getContext('2d');
+      ctx.clearRect(0, 0, liveCanvas.width, liveCanvas.height);
+      ctx.drawImage(doc.canvas, 0, 0);
+
+      if (docName) docName.textContent = doc.name || 'Untitled Document';
+      if (docDims) docDims.textContent = `${doc.width} × ${doc.height} px • ${doc.dpi || 300} DPI`;
+    }
+
+    if (window.WebStudioAdapter) {
+      window.WebStudioAdapter.on((event, doc) => {
+        syncCanvas(doc);
+      });
+      const currentDoc = window.WebStudioAdapter.getActiveDocument();
+      if (currentDoc) syncCanvas(currentDoc);
+    }
+
+    if (btnOpen) {
+      btnOpen.addEventListener('click', async () => {
+        if (window.WebStudioAdapter) {
+          const files = await window.WebStudioAdapter.pickFiles();
+          if (files && files.length > 0) {
+            await window.WebStudioAdapter.openDocument(files[0]);
+            toast(`Loaded: ${files[0].name}`, 'success');
+          }
+        }
+      });
+    }
+
+    if (btnSample) {
+      btnSample.addEventListener('click', () => {
+        if (window.WebStudioAdapter) {
+          window.WebStudioAdapter.loadSamplePhoto();
+          toast('Loaded high-res demo artwork', 'info');
+        }
+      });
+    }
+
+    if (btnReset) {
+      btnReset.addEventListener('click', () => {
+        if (window.WebStudioAdapter) {
+          window.WebStudioAdapter.resetToOriginal();
+          toast('Reverted to original photo', 'info');
+        }
+      });
+    }
+
+    if (btnExport) {
+      btnExport.addEventListener('click', async () => {
+        if (window.WebStudioAdapter) {
+          const doc = window.WebStudioAdapter.getActiveDocument();
+          const base = doc ? doc.name.replace(/\.[^/.]+$/, '') : 'antrygravity_output';
+          await window.WebStudioAdapter.saveAsJPEG(`${base}_processed`, 11);
+          toast('Exported processed image!', 'success');
+        }
+      });
+    }
   }
 
   function _renderDashboard() {
@@ -275,7 +349,7 @@ const AGUI = (() => {
     if (!wrap || !window.AGWorkflowEngine) return;
 
     const steps = window.AGWorkflowEngine.getSteps();
-    const scriptCode = window.AGWorkflowEngine.generateScript('uxp');
+    const scriptCode = window.AGWorkflowEngine.generateScript(_scriptMode);
 
     wrap.innerHTML = `
       <div class="ag-flex-between ag-mb-s">
@@ -302,7 +376,16 @@ const AGUI = (() => {
       <button class="ag-workflow-add-btn" id="btn-wf-add-step">+ Add Operation to Pipeline</button>
 
       <div class="ag-card ag-mt-m">
-        <div class="ag-section-label">Generated Automation Script Preview</div>
+        <div class="ag-flex-between ag-mb-s">
+          <div class="ag-section-label" style="margin-bottom:0">Photoshop Automation Script</div>
+          <div class="ag-btn-group">
+            <button class="ag-btn ag-btn--ghost ag-btn--sm" id="btn-wf-toggle-mode">
+              ${_scriptMode === 'uxp' ? 'Mode: UXP (2022+)' : 'Mode: JSX (Legacy)'}
+            </button>
+            <button class="ag-btn ag-btn--ghost ag-btn--sm" id="btn-wf-copy-script">📋 Copy</button>
+            <button class="ag-btn ag-btn--secondary ag-btn--sm" id="btn-wf-dl-script">📥 Download</button>
+          </div>
+        </div>
         <div class="ag-script-preview">${scriptCode.replace(/</g, '&lt;')}</div>
       </div>
 
@@ -315,6 +398,38 @@ const AGUI = (() => {
         </button>
       </div>
     `;
+
+    var btnToggleMode = wrap.querySelector('#btn-wf-toggle-mode');
+    if (btnToggleMode) {
+      btnToggleMode.addEventListener('click', () => {
+        _scriptMode = _scriptMode === 'uxp' ? 'jsx' : 'uxp';
+        _renderWorkflowView();
+      });
+    }
+
+    var btnCopyScript = wrap.querySelector('#btn-wf-copy-script');
+    if (btnCopyScript) {
+      btnCopyScript.addEventListener('click', () => {
+        navigator.clipboard.writeText(scriptCode).then(() => {
+          toast('Photoshop script copied to clipboard!', 'success');
+        }).catch(() => {
+          toast('Could not copy script', 'error');
+        });
+      });
+    }
+
+    var btnDlScript = wrap.querySelector('#btn-wf-dl-script');
+    if (btnDlScript) {
+      btnDlScript.addEventListener('click', () => {
+        const ext = _scriptMode === 'uxp' ? 'js' : 'jsx';
+        const blob = new Blob([scriptCode], { type: 'text/plain' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `antrygravity_pipeline.${ext}`;
+        a.click();
+        toast(`Downloaded antrygravity_pipeline.${ext}`, 'success');
+      });
+    }
 
     // Bind step delete & toggles
     wrap.querySelectorAll('.wf-step-del').forEach(btn => {

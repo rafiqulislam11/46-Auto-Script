@@ -48,6 +48,30 @@
   </nav>
 
   <!-- ═══════════════════════════════════════════
+       LIVE STUDIO CANVAS (Active Document & Real-Time Processing)
+  ═══════════════════════════════════════════ -->
+  <section class="ag-canvas-dock" id="ag-canvas-dock" aria-label="Studio Canvas">
+    <div class="ag-canvas-dock__header">
+      <div class="ag-canvas-dock__title">
+        <span class="ag-canvas-dock__icon">🎨</span>
+        <div class="ag-canvas-dock__meta">
+          <span class="ag-canvas-dock__name" id="dock-doc-name">Sample_Sunset_Landscape.jpg</span>
+          <span class="ag-canvas-dock__dims" id="dock-doc-dims">1920 × 1080 px • 300 DPI</span>
+        </div>
+      </div>
+      <div class="ag-canvas-dock__actions">
+        <button class="ag-dock-btn" id="btn-dock-open" title="Open Image from Computer">📁 Open Photo</button>
+        <button class="ag-dock-btn" id="btn-dock-sample" title="Load High-Res Demo Artwork">🎲 Sample</button>
+        <button class="ag-dock-btn" id="btn-dock-reset" title="Revert to Original">🔄 Reset</button>
+        <button class="ag-dock-btn ag-dock-btn--accent" id="btn-dock-export" title="Download Processed Output">💾 Export Image</button>
+      </div>
+    </div>
+    <div class="ag-canvas-dock__stage" id="ag-canvas-stage">
+      <canvas id="ag-live-preview-canvas" class="ag-live-preview-canvas"></canvas>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
        MAIN CONTENT VIEWS
   ═══════════════════════════════════════════ -->
   <main class="ag-main" id="ag-main">
@@ -136,6 +160,7 @@
   <script src="adapters/photoshop/ps-adapter.js"></script>
   <script src="adapters/legacy/CSInterface.js"></script>
   <script src="adapters/legacy/cep-adapter.js"></script>
+  <script src="adapters/web/web-adapter.js"></script>
   <script src="adapters/ai/base-provider.js"></script>
   <script src="adapters/ai/upscale-provider.js"></script>
   <script src="adapters/ai/background-provider.js"></script>

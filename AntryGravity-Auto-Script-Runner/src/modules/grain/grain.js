@@ -222,6 +222,11 @@ const AGGrainModule = (() => {
         return JSON.stringify({ success: true });
       })()`;
       await window.CEPAdapter.evalJSX(jsx);
+    } else if (bridge && bridge.addNoise) {
+      await bridge.addNoise(settings.amount, 'gaussian', settings.monochromatic);
+      if (settings.size > 1 && bridge.gaussianBlur) {
+        await bridge.gaussianBlur(settings.size * 0.4);
+      }
     }
   }
 

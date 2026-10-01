@@ -154,7 +154,17 @@ const AGExportManager = (() => {
             break;
         }
 
-        await window.CEPAdapter.closeDocument('doNotSaveChanges');
+      } else if (bridge && bridge.saveAsJPEG) {
+        if (format === 'png') {
+          await bridge.saveAsPNG(targetFilename);
+        } else if (format === 'tiff') {
+          await bridge.saveAsTIFF(targetFilename);
+        } else if (format === 'psd') {
+          await bridge.saveAsPSD(targetFilename);
+        } else {
+          await bridge.saveAsJPEG(targetFilename, _config.quality);
+        }
+        AGLogger.success(`[ExportManager] Downloaded export: ${targetFilename}`);
       } else {
         AGLogger.info(`[ExportManager Simulation] Exported ${targetFilename}`);
       }

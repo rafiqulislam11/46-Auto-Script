@@ -176,6 +176,8 @@ const AGPassportModule = (() => {
         return JSON.stringify({ success: true });
       })()`;
       await window.CEPAdapter.evalJSX(jsx);
+    } else if (bridge && bridge.generatePassport) {
+      await bridge.generatePassport(settings);
     }
   }
 

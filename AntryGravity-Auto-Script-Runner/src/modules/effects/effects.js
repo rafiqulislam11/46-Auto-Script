@@ -202,6 +202,8 @@ const AGEffectsModule = (() => {
         return JSON.stringify({ success: true });
       })()`;
       await window.CEPAdapter.evalJSX(jsx);
+    } else if (bridge && bridge.applyEffect) {
+      await bridge.applyEffect(effectKey);
     }
   }
 

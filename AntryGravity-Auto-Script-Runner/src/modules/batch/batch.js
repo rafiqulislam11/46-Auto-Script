@@ -95,7 +95,7 @@ const AGBatchModule = (() => {
       e.preventDefault();
       dropZone.classList.remove('drag-over');
       if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-        const fileList = Array.from(e.dataTransfer.files).map(f => ({ name: f.name, path: f.path || f.name }));
+        const fileList = Array.from(e.dataTransfer.files).map(f => ({ name: f.name, path: f.name, file: f, entry: f }));
         window.AGQueue.addFiles(fileList);
         _renderFileList();
       }
@@ -106,18 +106,18 @@ const AGBatchModule = (() => {
       if ((window.PSAdapter && window.PSAdapter.isAvailable)) {
         const files = await window.PSAdapter.pickFiles();
         if (files && files.length > 0) {
-          const fileItems = files.map(entry => ({ name: entry.name, path: entry.name, entry }));
+          const fileItems = files.map(entry => ({ name: entry.name, path: entry.name, entry, file: entry }));
           window.AGQueue.addFiles(fileItems);
           _renderFileList();
         }
       } else {
-        // Fallback file input
+        // Web / HTML5 file input
         const input = document.createElement('input');
         input.type = 'file';
         input.multiple = true;
         input.accept = '.jpg,.jpeg,.png,.tif,.tiff,.psd,.webp';
         input.onchange = (e) => {
-          const files = Array.from(e.target.files).map(f => ({ name: f.name, path: f.name }));
+          const files = Array.from(e.target.files).map(f => ({ name: f.name, path: f.name, file: f, entry: f }));
           window.AGQueue.addFiles(files);
           _renderFileList();
         };
@@ -131,12 +131,33 @@ const AGBatchModule = (() => {
         const folder = await window.PSAdapter.pickFolder();
         if (folder) {
           const files = await window.PSAdapter.listFiles(folder);
-          const fileItems = files.map(entry => ({ name: entry.name, path: entry.name, entry }));
+          const fileItems = files.map(entry => ({ name: entry.name, path: entry.name, entry, file: entry }));
           window.AGQueue.addFiles(fileItems);
           _renderFileList();
         }
       } else {
-        if (window.AGUI && window.AGUI.toast) window.AGUI.toast('Folder picking requires active Photoshop session', 'warn');
+        // Web / HTML5 folder input via webkitdirectory
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.webkitdirectory = true;
+        input.directory = true;
+        input.multiple = true;
+        input.onchange = (e) => {
+          const supported = ['jpg','jpeg','png','tif','tiff','psd','webp'];
+          const files = Array.from(e.target.files).filter(f => {
+            const ext = f.name.split('.').pop().toLowerCase();
+            return supported.includes(ext);
+          }).map(f => ({ name: f.name, path: f.webkitRelativePath || f.name, file: f, entry: f }));
+
+          if (files.length > 0) {
+            window.AGQueue.addFiles(files);
+            _renderFileList();
+            if (window.AGUI && window.AGUI.toast) window.AGUI.toast(`Loaded ${files.length} images from folder`, 'success');
+          } else {
+            if (window.AGUI && window.AGUI.toast) window.AGUI.toast('No supported images found in folder', 'warn');
+          }
+        };
+        input.click();
       }
     });
 

@@ -68,10 +68,16 @@ const AGVersionDetector = (() => {
       uxpActions: true, uxpIO: true, smartObjects: true,
       neuralFilters: true, selectSubject: true, imageSize: true,
       saveForWeb: true, fieldBlur: true
+    },
+    0: {
+      year: 'Web Studio', apiMode: 'web',
+      uxpActions: true, uxpIO: true, smartObjects: true,
+      neuralFilters: true, selectSubject: true, imageSize: true,
+      saveForWeb: true, fieldBlur: true
     }
   };
 
-  const DEFAULT_CAPS = FEATURE_MATRIX[23]; // fallback to 2022
+  const DEFAULT_CAPS = FEATURE_MATRIX[0]; // fallback to Web Studio
 
   let _detected = null;
 
@@ -83,39 +89,45 @@ const AGVersionDetector = (() => {
     if (_detected) return _detected;
 
     let versionString = 'Unknown';
-    let major = 23; // default to 2022
+    let major = 0; // default to Web Studio mode
 
     try {
       // ── UXP environment (PS 2022+) ──────────────────────────────
       if (typeof require !== 'undefined') {
         try {
-          const app = require('photoshop').app;
-          versionString = app.version || 'Unknown';
-          major = parseInt(versionString.split('.')[0], 10);
-          AGLogger.success(`[VersionDetector] UXP detected Photoshop ${versionString}`);
+          const ps = require('photoshop');
+          if (ps && ps.app) {
+            versionString = ps.app.version || 'Unknown';
+            major = parseInt(versionString.split('.')[0], 10);
+            AGLogger.success(`[VersionDetector] UXP detected Photoshop ${versionString}`);
+          }
         } catch (uxpErr) {
           AGLogger.warn(`[VersionDetector] UXP require failed: ${uxpErr.message}`);
         }
       }
 
       // ── CEP environment fallback (PS 2020–2021) ─────────────────
-      if (versionString === 'Unknown' && typeof CSInterface !== 'undefined') {
+      if (versionString === 'Unknown' && typeof window.__adobe_cep__ !== 'undefined' && typeof CSInterface !== 'undefined') {
         try {
           const cs = new CSInterface();
-          const hostEnv = cs.getHostEnvironment();
-          versionString = hostEnv.appVersion || 'Unknown';
-          major = parseInt(versionString.split('.')[0], 10);
-          AGLogger.success(`[VersionDetector] CEP detected Photoshop ${versionString}`);
+          if (cs.isCEP) {
+            const hostEnv = cs.getHostEnvironment();
+            if (hostEnv.appId === 'PHSP' || hostEnv.appId === 'PHXS') {
+              versionString = hostEnv.appVersion || 'Unknown';
+              major = parseInt(versionString.split('.')[0], 10);
+              AGLogger.success(`[VersionDetector] CEP detected Photoshop ${versionString}`);
+            }
+          }
         } catch (cepErr) {
           AGLogger.warn(`[VersionDetector] CEP CSInterface failed: ${cepErr.message}`);
         }
       }
 
-      // ── Browser / dev environment ────────────────────────────────
+      // ── Browser / Web Studio environment ────────────────────────
       if (versionString === 'Unknown') {
-        versionString = '23.0.0 (dev/browser)';
-        major = 23;
-        AGLogger.warn('[VersionDetector] No PS environment – using dev mode (v23)');
+        versionString = 'Web Studio Mode';
+        major = 0;
+        AGLogger.info('[VersionDetector] Web browser detected – running in Web Studio Mode');
       }
 
     } catch (err) {
@@ -123,18 +135,18 @@ const AGVersionDetector = (() => {
     }
 
     const caps = FEATURE_MATRIX[major] || { ...DEFAULT_CAPS };
-    major = isNaN(major) ? 23 : major;
+    major = isNaN(major) ? 0 : major;
 
     _detected = {
       versionString,
       major,
       minor: 0,
-      year:  caps.year || 2022,
-      apiMode: caps.apiMode || 'uxp',
+      year:  caps.year || 'Web Studio',
+      apiMode: caps.apiMode || 'web',
       caps
     };
 
-    AGLogger.info(`[VersionDetector] Mode: ${_detected.apiMode}, Year: ${_detected.year}`);
+    AGLogger.info(`[VersionDetector] Mode: ${_detected.apiMode.toUpperCase()}, Environment: ${_detected.year}`);
     return _detected;
   }
 

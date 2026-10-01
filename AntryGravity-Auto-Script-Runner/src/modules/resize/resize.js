@@ -155,7 +155,7 @@ const AGResizeModule = (() => {
   }
 
   async function applyResize(settings) {
-    const bridge = (window.AGApp && window.AGApp.getActiveBridge ? window.AGApp.getActiveBridge() : (window.PSAdapter || window.CEPAdapter));
+    const bridge = (window.AGApp && window.AGApp.getActiveBridge ? window.AGApp.getActiveBridge() : (window.PSAdapter || window.CEPAdapter || window.WebStudioAdapter));
     if (!bridge) throw new Error('Photoshop bridge not connected');
 
     AGLogger.info(`[Resize] Resizing to ${settings.width}x${settings.height} @ ${settings.dpi} DPI (${settings.fitMode})`);

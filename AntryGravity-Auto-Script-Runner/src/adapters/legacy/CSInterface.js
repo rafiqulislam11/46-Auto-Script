@@ -22,9 +22,9 @@
       }
     }
     return {
-      appId: 'PHSP',
-      appName: 'Photoshop',
-      appVersion: '23.0.0',
+      appId: 'WEB',
+      appName: 'Web Studio',
+      appVersion: '0.0.0',
       appLocale: 'en_US'
     };
   };

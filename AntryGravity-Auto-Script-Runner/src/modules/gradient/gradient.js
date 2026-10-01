@@ -242,6 +242,13 @@ const AGGradientModule = (() => {
         return JSON.stringify({ success: true });
       })()`;
       await window.CEPAdapter.evalJSX(jsx);
+    } else if (bridge && bridge.applyGradientFill) {
+      const c1 = settings.colors[0] || '#6c63ff';
+      const c2 = settings.colors[1] || '#00c8ff';
+      await bridge.applyGradientFill(c1, c2, settings.angle || 135);
+      if (settings.noise > 0 && bridge.addNoise) {
+        await bridge.addNoise(settings.noise, 'gaussian', true);
+      }
     }
   }
 

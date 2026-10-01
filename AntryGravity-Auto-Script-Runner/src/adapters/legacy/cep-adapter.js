@@ -17,21 +17,23 @@ const CEPAdapter = (() => {
 
   /** Initialize CSInterface if in CEP environment */
   function init() {
-    if (typeof CSInterface !== 'undefined') {
+    if (typeof CSInterface !== 'undefined' && typeof window.__adobe_cep__ !== 'undefined') {
       try {
         _cs = new CSInterface();
-        _ready = true;
-        if (window.AGLogger) {
+        _ready = !!_cs.isCEP;
+        if (_ready && window.AGLogger) {
           AGLogger.success('[CEPAdapter] CSInterface connected for legacy mode');
         }
-        return true;
+        return _ready;
       } catch (err) {
         if (window.AGLogger) {
           AGLogger.warn(`[CEPAdapter] CSInterface init failed: ${err.message}`);
         }
+        _ready = false;
         return false;
       }
     }
+    _ready = false;
     return false;
   }
 
